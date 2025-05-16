@@ -1,6 +1,6 @@
 ---
 title: Home
-layout: default
+description: test website
 ---
 
 # Simple JS Image Classifiers
