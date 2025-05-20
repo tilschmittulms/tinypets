@@ -3,22 +3,26 @@ title: 1. Single file
 description: test website
 ---
 
-<input id="text-input" type="text" placeholder="Enter your text">
-<button onclick="submitText()">Submit</button>
-<div id="results"></div>
+<body>
+  <h2>Talk to the API</h2>
+  <input type="text" id="userInput" placeholder="Enter input here" />
+  <button onclick="callAPI()">Submit</button>
+  <p id="result">Output will appear here...</p>
 
-<script>
-  async function submitText() {
-    const input = document.getElementById("text-input").value;
+  <script>
+    async function callAPI() {
+      const input = document.getElementById("userInput").value;
+      const response = await fetch("https://tilschmittulms-minimal.hf.space/api/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ data: [input] })
+      });
 
-    const response = await fetch("https://tilschmittulms-minimal.hf.space/api/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: [input] })
-    });
-
-    const json = await response.json();
-    const result = json.data[0]; // Assuming the output is a single string
-    document.getElementById("results").innerHTML = `<p>Result: ${result}</p>`;
-  }
-</script>
+      const json = await response.json();
+      const output = json.data?.[0];
+      document.getElementById("result").innerText = "Output: " + output;
+    }
+  </script>
+</body>
