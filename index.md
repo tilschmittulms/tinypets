@@ -3,22 +3,22 @@ title: 1. Single file
 description: test website
 ---
 
-<input id="photo" type="file">
+<input id="text-input" type="text" placeholder="Enter your text">
+<button onclick="submitText()">Submit</button>
 <div id="results"></div>
+
 <script>
-  async function loaded(reader) {
-    const response = await fetch('https://hf.space/embed/jph00/pets/+/api/predict/', {
-      method: "POST", body: JSON.stringify({ "data": [reader.result] }),
-      headers: { "Content-Type": "application/json" }
+  async function submitText() {
+    const input = document.getElementById("text-input").value;
+
+    const response = await fetch("https://tilschmittulms-minimal.hf.space/api/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [input] })
     });
+
     const json = await response.json();
-    const label = json['data'][0]['confidences'][0]['label'];
-    results.innerHTML = `<br/><img src="${reader.result}" width="300"> <p>${label}</p>`
+    const result = json.data[0]; // Assuming the output is a single string
+    document.getElementById("results").innerHTML = `<p>Result: ${result}</p>`;
   }
-  function read() {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => loaded(reader))
-    reader.readAsDataURL(photo.files[0]);
-  }
-  photo.addEventListener('input', read);
 </script>
